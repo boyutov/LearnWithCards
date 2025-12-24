@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Learn With Cards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .top-bar {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background: white;
+            color: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .logout-btn {
+            background: #ff6b6b;
+            border: none;
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background: #ff5252;
+            color: white;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .card-container {
+            perspective: 1000px;
+            margin-bottom: 40px;
+            width: 320px;
+            height: 220px;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 600;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            padding: 20px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .card-front {
+            background: white;
+            color: #333;
+        }
+
+        .card-back {
+            background: #2d3436;
+            color: white;
+            transform: rotateY(180deg);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 30px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            color: #764ba2;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .control-btn:hover:not(.disabled) {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .control-btn.disabled {
+            background: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .learn-btn {
+            padding: 12px 30px;
+            border-radius: 30px;
+            background: #00b894;
+            color: white;
+            border: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 184, 148, 0.4);
+        }
+
+        .learn-btn:hover {
+            background: #00a884;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 184, 148, 0.6);
+        }
+
+        .delete-permanent-btn {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .delete-permanent-btn:hover {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border-color: #ff6b6b;
+        }
+
+        .page-info {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 15px;
+        }
+
+        .congrats {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div style="display: flex; gap: 10px;">
+        <a href="/add" class="nav-btn">Add Word</a>
+        <a href="/learned" class="nav-btn">Learned Words</a>
+    </div>
+    <form th:action="@{/logout}" method="post" style="margin: 0;">
+        <button type="submit" class="nav-btn logout-btn">Logout</button>
+    </form>
+</div>
+
+<div class="main-content">
+    <h1>Learn With Cards</h1>
+
+    <div th:if="${allLearned}" class="congrats">
+        <h2>🎉 Amazing!</h2>
+        <p>You have learned all the words!</p>
+        <a href="/add" class="learn-btn" style="text-decoration: none; display: inline-block; margin-top: 20px;">Add More Words</a>
+    </div>
+
+    <div th:if="${card != null}">
+        <div class="card-container">
+            <div class="card" id="flashcard" th:classappend="${showTranslationFirst} ? 'flipped'" onclick="this.classList.toggle('flipped')">
+                <div class="card-face card-front">
+                    <span th:text="${card.word}">Word</span>
+                </div>
+                <div class="card-face card-back">
+                    <span th:text="${card.translation}">Translation</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+            <div class="controls">
+                <a th:href="@{/(page=${currentPage - 1})}"
+                   class="control-btn"
+                   th:classappend="${currentPage == 0} ? 'disabled'">←</a>
+
+                <span class="page-info">
+                    <span th:text="${currentPage + 1}">1</span> / <span th:text="${totalPages}">10</span>
+                </span>
+
+                <a th:href="@{/(page=${currentPage + 1})}"
+                   class="control-btn"
+                   th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">→</a>
+            </div>
+
+            <form th:action="@{/learn/{id}(id=${card.id})}" method="post">
+                <button type="submit" class="learn-btn">Mark as Learned ✓</button>
+            </form>
+
+            <form th:action="@{/delete/{id}(id=${card.id})}" method="post" onsubmit="return confirm('Are you sure you want to delete this card permanently?');">
+                <button type="submit" class="delete-permanent-btn">Delete Permanently</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
