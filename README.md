@@ -1,26 +1,32 @@
 # LearnWithCards
 
-**LearnWithCards** — это веб-приложение для изучения иностранных слов с помощью карточек.
+**LearnWithCards** is a web application for learning foreign words using flashcards.
 
-## Как работает
-- Добавляешь слово на изучаемом языке и его перевод.
-- Учишь слово, используя карточки.
-- Если слово выучено — отмечаешь как изученное.
-- Если появляются новые слова — добавляешь их и продолжаешь учить.
+## How it works
+- Add a word in the target language and its translation.
+- Study the word using flashcards.
+- Mark a word as learned once you know it.
+- Add new words anytime and keep learning.
 
-## Функции
-- Создание карточек со словами и переводом
-- Отслеживание изученных слов
-- Добавление новых слов для изучения
-- Простая и удобная система повторения
+## Features
+- Create flashcards with words and translations
+- Track learned words
+- Add new words for study
+- Simple and convenient spaced repetition system
 
-## Технологии
+## Tech Stack
 - Frontend: HTML, CSS, JavaScript
 - Backend: Java / Spring Boot
-- База данных: PostgreSQL
-## Как запустить
-1. Клонировать репозиторий:
-2. Поднять на докере контейнер:
+- Database: PostgreSQL
+
+## Getting Started
+
+1. Clone the repository:
 ```bash
 git clone https://github.com/boyutov/LearnWithCards.git
+```
 
+2. Start the Docker container:
+```bash
+docker-compose up
+```
